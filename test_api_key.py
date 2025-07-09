@@ -2,7 +2,7 @@ import google.generativeai as genai
 import os
 
 # Set your API key (you can also use environment variables)
-genai.configure(api_key="YOUR_API_KEY")
+genai.configure(api_key="AIzaSyBGwZk52pLOaHI1M7NgSdoswUNwsQXpqhs")
 
 # Use Gemini model
 model = genai.GenerativeModel("gemini-pro")
