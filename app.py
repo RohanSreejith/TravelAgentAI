@@ -22,7 +22,7 @@ def load_agent():
         llm = ChatGoogleGenerativeAI(
             model="gemini-pro",  # Updated model name
             temperature=0,
-            google_api_key=st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
+            google_api_key=st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY"),
             convert_system_message_to_human=True
         )
         
