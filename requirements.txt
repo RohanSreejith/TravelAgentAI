@@ -1,4 +1,8 @@
-streamlit
-langchain-google-genai
-python-dotenv
-requests
+streamlit>=1.28.0
+langchain>=0.0.346
+langchain-google-genai>=0.0.5
+python-dotenv>=1.0.0
+requests>=2.31.0
+google-generativeai>=0.3.0
+duckduckgo-search>=3.8.6
+langchain-community>=0.0.11
