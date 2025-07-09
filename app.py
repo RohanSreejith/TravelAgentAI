@@ -20,7 +20,7 @@ st.set_page_config(
 def load_agent():
     try:
         llm = ChatGoogleGenerativeAI(
-            model="gemini-pro",  # Updated model name
+            model="models/gemini-1.5-flash",  # Updated model name
             temperature=0,
             google_api_key=st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY"),
             convert_system_message_to_human=True
