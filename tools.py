@@ -11,25 +11,26 @@ def _get_packages(_input: str) -> str:
         packages = response.json()
 
         if not packages:
-            return "No travel packages found."
+            return "❗ No travel packages found."
 
-        formatted = "### 🧳 Travel Packages:\n"
+        formatted = "### 🧳 Available Travel Packages\n"
         for pkg in packages:
             formatted += (
-                f"---\n"
-                f"**ID:** {pkg['id']}\n"
-                f"**Title:** {pkg['title']}\n"
-                f"**Destination:** {pkg['destination']}\n"
-                f"**Duration:** {pkg['duration_days']} days\n"
-                f"**Price:** ${pkg['price']}\n"
-                f"**Description:** {pkg['description']}\n\n"
+                f"\n---\n"
+                f"**🆔 ID:** {pkg['id']}  \n"
+                f"**🏷️ Title:** {pkg['title']}  \n"
+                f"**📍 Destination:** {pkg['destination']}  \n"
+                f"**📅 Duration:** {pkg['duration_days']} days  \n"
+                f"**💰 Price:** ${pkg['price']:,.2f}  \n"
+                f"**📝 Description:** {pkg['description']}  \n"
             )
         return formatted
+
     except requests.exceptions.RequestException as e:
         return (
             f"❌ Error fetching packages: {e}\n"
-            f"Status Code: {getattr(e.response, 'status_code', 'N/A')}\n"
-            f"Details: {getattr(e.response, 'text', '')}"
+            f"**Status Code:** {getattr(e.response, 'status_code', 'N/A')}\n"
+            f"**Details:** {getattr(e.response, 'text', '')}"
         )
 
 def _create_package(input_str: str) -> str:
@@ -52,12 +53,12 @@ def _create_package(input_str: str) -> str:
 
         return (
             f"✅ **Package Created Successfully!**\n\n"
-            f"**ID:** {created.get('id')}\n"
-            f"**Title:** {created.get('title')}\n"
-            f"**Destination:** {created.get('destination')}\n"
-            f"**Duration:** {created.get('duration_days')} days\n"
-            f"**Price:** ${created.get('price')}\n"
-            f"**Description:** {created.get('description')}"
+            f"**🆔 ID:** {created.get('id')}  \n"
+            f"**🏷️ Title:** {created.get('title')}  \n"
+            f"**📍 Destination:** {created.get('destination')}  \n"
+            f"**📅 Duration:** {created.get('duration_days')} days  \n"
+            f"**💰 Price:** ${created.get('price'):,.2f}  \n"
+            f"**📝 Description:** {created.get('description')}"
         )
     except Exception as e:
         return f"❌ Error creating package: {str(e)}"
