@@ -15,9 +15,10 @@ def _get_packages(_input: str) -> str:
 
         result = "🧳 **Available Travel Packages:**\n"
         for pkg in packages:
+            price_raw = pkg.get("price", 0)
             try:
-                price = float(pkg.get('price', 0))
-                price_str = f"${price:,.2f}"
+                price_val = float(price_raw)
+                price_str = f"${price_val:,.2f}"
             except (ValueError, TypeError):
                 price_str = "N/A"
 
@@ -34,6 +35,7 @@ def _get_packages(_input: str) -> str:
 
     except requests.exceptions.RequestException as e:
         return f"❌ Error fetching packages: {e}"
+
 
 
 def _create_package(input_str: str) -> str:
