@@ -15,19 +15,26 @@ def _get_packages(_input: str) -> str:
 
         result = "🧳 **Available Travel Packages:**\n"
         for pkg in packages:
+            try:
+                price = float(pkg.get('price', 0))
+                price_str = f"${price:,.2f}"
+            except (ValueError, TypeError):
+                price_str = "N/A"
+
             result += (
                 f"\n---\n"
                 f"**ID:** {pkg.get('id', 'N/A')}\n"
                 f"**Title:** {pkg.get('title', 'N/A')}\n"
                 f"**Destination:** {pkg.get('destination', 'N/A')}\n"
                 f"**Duration:** {pkg.get('duration_days', 'N/A')} days\n"
-                f"**Price:** ${pkg.get('price', 0):,.2f}\n"
+                f"**Price:** {price_str}\n"
                 f"**Description:** {pkg.get('description', 'N/A')}\n"
             )
         return result
 
     except requests.exceptions.RequestException as e:
         return f"❌ Error fetching packages: {e}"
+
 
 def _create_package(input_str: str) -> str:
     try:
