@@ -20,7 +20,7 @@ GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 def load_agent():
     llm = ChatGroq(
         groq_api_key=GROQ_API_KEY,
-        model_name="mixtral-8x7b-32768", # or "mixtral-8x7b-32768", etc.
+        model_name="llama3-70b-8192", # or "mixtral-8x7b-32768", etc.
         temperature=0,
     )
     return initialize_agent(
