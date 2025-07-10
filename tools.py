@@ -42,19 +42,44 @@ def _create_package(input_str: str) -> str:
     try:
         parts = [p.strip() for p in input_str.split("|")]
         if len(parts) != 5:
-            return "Format: title | destination | days | price | description"
+            return "❗ Format: title | destination | days | price | description"
+
+        # Validate numeric fields
+        try:
+            days = int(parts[2])
+        except ValueError:
+            return "❗ Invalid duration. 'days' must be an integer."
+
+        try:
+            price = float(parts[3])
+        except ValueError:
+            return "❗ Invalid price. 'price' must be a number."
+
         data = {
             "title": parts[0],
             "destination": parts[1],
-            "duration_days": int(parts[2]),
-            "price": float(parts[3]),
+            "duration_days": days,
+            "price": price,
             "description": parts[4],
         }
+
         response = requests.post(f"{API_BASE}packages/", json=data, auth=AUTH, timeout=10)
         response.raise_for_status()
-        return f"Success: {response.json()}"
+        created = response.json()
+
+        return (
+            f"✅ Package created:\n"
+            f"🆔 ID: {created.get('id', 'N/A')}\n"
+            f"🏷️ Title: {created.get('title', 'N/A')}\n"
+            f"📍 Destination: {created.get('destination', 'N/A')}\n"
+            f"📅 Duration: {created.get('duration_days', 'N/A')} days\n"
+            f"💰 Price: ${created.get('price', 0):,.2f}\n"
+            f"📝 Description: {created.get('description', 'N/A')}"
+        )
+
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"❌ Error creating package: {str(e)}"
+
 
 get_packages = Tool(
     name="get_packages",
