@@ -15,7 +15,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Initialize the agent (cached to avoid reloading)
+# Initialize the agent (cached)
 @st.cache_resource
 def load_agent():
     llm = ChatGoogleGenerativeAI(
@@ -40,7 +40,7 @@ st.markdown("Ask about packages or create new ones")
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display chat messages
+# Display previous chat history
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
@@ -49,38 +49,41 @@ for message in st.session_state.messages:
 if prompt := st.chat_input("Ask about travel packages..."):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
-    
+
     # Display user message
     with st.chat_message("user"):
         st.markdown(prompt)
-    
+
     # Get agent response
     agent = load_agent()
     with st.spinner("Thinking..."):
-        response = agent.invoke(prompt)
-    
+        result = agent.invoke({"input": prompt})
+        reply = result.get("output", "⚠️ No response received.")
+
     # Display assistant response
     with st.chat_message("assistant"):
-        st.markdown(response)
-    
-    # Add assistant response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": response})
+        st.markdown(reply)
+
+    # Save assistant response to chat history
+    st.session_state.messages.append({"role": "assistant", "content": reply})
 
 # Sidebar for package creation
 with st.sidebar:
     st.header("📦 Create New Package")
-    
+
     with st.form("package_form"):
         title = st.text_input("Package Title")
         destination = st.text_input("Destination")
         days = st.number_input("Duration (days)", min_value=1)
         price = st.number_input("Price ($)", min_value=0)
         description = st.text_area("Description")
-        
+
         submitted = st.form_submit_button("Create Package")
         if submitted:
             input_str = f"{title}|{destination}|{days}|{price}|{description}"
             agent = load_agent()
-            result = agent.invoke(f"Create a new package: {input_str}")
+            with st.spinner("Creating package..."):
+                result = agent.invoke({"input": f"Create a new package: {input_str}"})
+                reply = result.get("output", "⚠️ No response received.")
             st.success("Package created!")
-            st.info(result)
+            st.info(reply)
