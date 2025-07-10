@@ -23,6 +23,7 @@ def _get_packages(_input: str) -> str:
                 price_str = "N/A 💥 (Invalid price)"
                 print(f"[Warning] Could not parse price for package ID {pkg.get('id')}: {e}")
 
+
             result += (
                 f"\n---\n"
                 f"**ID:** {pkg.get('id', 'N/A')}\n"
