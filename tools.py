@@ -4,29 +4,30 @@ import requests
 API_BASE = "https://travelagentbackend.onrender.com/api/"
 AUTH = ("rohansreejith05", "Rohan333$")
 
-def _get_packages(_input: str) -> str:
+def _get_packages(_: str) -> str:
     try:
-        response = requests.get(f"{API_BASE}packages/", auth=AUTH, timeout=15)
-        response.raise_for_status()
-        packages = response.json()
+        res = requests.get(f"{API_BASE}packages/", auth=AUTH, timeout=15)
+        res.raise_for_status()
+        packages = res.json()
 
         if not packages:
             return "❗ No travel packages found."
 
-        formatted = "### 🧳 Available Travel Packages\n"
-        for pkg in packages:
-            formatted += (
+        output = ["### 🧳 Available Travel Packages"]
+        for p in packages:
+            price = p.get("price") or 0.0
+            output.append(
                 f"\n---\n"
-                f"**🆔 ID:** {pkg.get('id', 'N/A')}  \n"
-                f"**🏷️ Title:** {pkg.get('title', 'N/A')}  \n"
-                f"**📍 Destination:** {pkg.get('destination', 'N/A')}  \n"
-                f"**📅 Duration:** {pkg.get('duration_days', 'N/A')} days  \n"
-                f"**💰 Price:** ${pkg.get('price', 0):,.2f}  \n"
-                f"**📝 Description:** {pkg.get('description', 'N/A')}  \n"
+                f"**🆔 ID:** {p.get('id', 'N/A')}  \n"
+                f"**🏷️ Title:** {p.get('title', 'N/A')}  \n"
+                f"**📍 Destination:** {p.get('destination', 'N/A')}  \n"
+                f"**📅 Duration:** {p.get('duration_days', 'N/A')} days  \n"
+                f"**💰 Price:** ${price:,.2f}  \n"
+                f"**📝 Description:** {p.get('description', 'N/A')}"
             )
-        return formatted
+        return "\n".join(output)
 
-    except requests.exceptions.RequestException as e:
+    except requests.RequestException as e:
         return (
             f"❌ Error fetching packages: {e}\n"
             f"**Status Code:** {getattr(e.response, 'status_code', 'N/A')}\n"
@@ -37,7 +38,7 @@ def _create_package(input_str: str) -> str:
     try:
         parts = [p.strip() for p in input_str.split("|")]
         if len(parts) != 5:
-            return "❗ Invalid format. Use: title | destination | days | price | description"
+            return "❗ Use format: title | destination | days | price | description"
 
         data = {
             "title": parts[0],
@@ -47,21 +48,23 @@ def _create_package(input_str: str) -> str:
             "description": parts[4],
         }
 
-        response = requests.post(f"{API_BASE}packages/", json=data, auth=AUTH, timeout=10)
-        response.raise_for_status()
-        created = response.json()
+        res = requests.post(f"{API_BASE}packages/", json=data, auth=AUTH, timeout=10)
+        res.raise_for_status()
+        p = res.json()
+        price = p.get("price") or 0.0
 
         return (
-            f"✅ **Package Created Successfully!**\n\n"
-            f"**🆔 ID:** {created.get('id', 'N/A')}  \n"
-            f"**🏷️ Title:** {created.get('title', 'N/A')}  \n"
-            f"**📍 Destination:** {created.get('destination', 'N/A')}  \n"
-            f"**📅 Duration:** {created.get('duration_days', 'N/A')} days  \n"
-            f"**💰 Price:** ${created.get('price', 0):,.2f}  \n"
-            f"**📝 Description:** {created.get('description', 'N/A')}"
+            f"✅ **Package Created!**\n\n"
+            f"**🆔 ID:** {p.get('id', 'N/A')}  \n"
+            f"**🏷️ Title:** {p.get('title', 'N/A')}  \n"
+            f"**📍 Destination:** {p.get('destination', 'N/A')}  \n"
+            f"**📅 Duration:** {p.get('duration_days', 'N/A')} days  \n"
+            f"**💰 Price:** ${price:,.2f}  \n"
+            f"**📝 Description:** {p.get('description', 'N/A')}"
         )
+
     except Exception as e:
-        return f"❌ Error creating package: {str(e)}"
+        return f"❌ Error creating package: {e}"
 
 get_packages = Tool(
     name="get_packages",
