@@ -4,14 +4,14 @@ import requests
 API_BASE = "https://travelagentbackend.onrender.com/api/"
 AUTH = ("rohansreejith05", "Rohan333$")
 
-def _get_packages(_input: str) -> dict:
+def _get_packages(_input: str) -> str:
     try:
         res = requests.get(f"{API_BASE}packages/", auth=AUTH, timeout=10)
         res.raise_for_status()
         packages = res.json()
 
         if not packages:
-            return {"output": "❗ No packages found."}
+            return "❗ No packages found."
 
         msg = "🧳 **Available Travel Packages:**\n"
         for pkg in packages:
@@ -30,9 +30,10 @@ def _get_packages(_input: str) -> dict:
                 f"**Price:** {price_str}\n"
                 f"**Description:** {pkg.get('description', 'N/A')}\n"
             )
-        return {"output": msg}
+        return msg
     except requests.exceptions.RequestException as e:
-        return {"output": f"❌ Error fetching packages: {e}"}
+        return f"❌ Error fetching packages: {e}"
+
 
 def _create_package(input_str: str) -> dict:
     try:
