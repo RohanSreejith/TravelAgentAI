@@ -1,7 +1,7 @@
 from langchain.tools import Tool
 import requests
 
-API_BASE = "http://localhost:8000/api/"
+API_BASE = "https://travelagentbackend.onrender.com/api"
 AUTH = ("rohansreejith05", "Rohan333$")
 
 def _get_packages(_input: str) -> str:
