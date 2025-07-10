@@ -57,7 +57,7 @@ if prompt := st.chat_input("Ask about travel packages..."):
     # Get agent response
     agent = load_agent()
     with st.spinner("Thinking..."):
-        response = agent.run(prompt)
+        response = agent.invoke(prompt)
     
     # Display assistant response
     with st.chat_message("assistant"):
@@ -81,6 +81,6 @@ with st.sidebar:
         if submitted:
             input_str = f"{title}|{destination}|{days}|{price}|{description}"
             agent = load_agent()
-            result = agent.run(f"Create a new package: {input_str}")
+            result = agent.invoke(f"Create a new package: {input_str}")
             st.success("Package created!")
             st.info(result)
