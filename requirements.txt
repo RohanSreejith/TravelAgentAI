@@ -1,5 +1,5 @@
 streamlit
 langchain
-langchain-community
+langchain-community==0.0.198
 python-dotenv
 requests
