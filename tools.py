@@ -17,12 +17,12 @@ def _get_packages(_input: str) -> str:
         for pkg in packages:
             formatted += (
                 f"\n---\n"
-                f"**🆔 ID:** {pkg['id']}  \n"
-                f"**🏷️ Title:** {pkg['title']}  \n"
-                f"**📍 Destination:** {pkg['destination']}  \n"
-                f"**📅 Duration:** {pkg['duration_days']} days  \n"
-                f"**💰 Price:** ${pkg['price']:,.2f}  \n"
-                f"**📝 Description:** {pkg['description']}  \n"
+                f"**🆔 ID:** {pkg.get('id', 'N/A')}  \n"
+                f"**🏷️ Title:** {pkg.get('title', 'N/A')}  \n"
+                f"**📍 Destination:** {pkg.get('destination', 'N/A')}  \n"
+                f"**📅 Duration:** {pkg.get('duration_days', 'N/A')} days  \n"
+                f"**💰 Price:** ${pkg.get('price', 0):,.2f}  \n"
+                f"**📝 Description:** {pkg.get('description', 'N/A')}  \n"
             )
         return formatted
 
@@ -53,12 +53,12 @@ def _create_package(input_str: str) -> str:
 
         return (
             f"✅ **Package Created Successfully!**\n\n"
-            f"**🆔 ID:** {created.get('id')}  \n"
-            f"**🏷️ Title:** {created.get('title')}  \n"
-            f"**📍 Destination:** {created.get('destination')}  \n"
-            f"**📅 Duration:** {created.get('duration_days')} days  \n"
-            f"**💰 Price:** ${created.get('price'):,.2f}  \n"
-            f"**📝 Description:** {created.get('description')}"
+            f"**🆔 ID:** {created.get('id', 'N/A')}  \n"
+            f"**🏷️ Title:** {created.get('title', 'N/A')}  \n"
+            f"**📍 Destination:** {created.get('destination', 'N/A')}  \n"
+            f"**📅 Duration:** {created.get('duration_days', 'N/A')} days  \n"
+            f"**💰 Price:** ${created.get('price', 0):,.2f}  \n"
+            f"**📝 Description:** {created.get('description', 'N/A')}"
         )
     except Exception as e:
         return f"❌ Error creating package: {str(e)}"
