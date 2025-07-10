@@ -61,8 +61,10 @@ if prompt := st.chat_input("Ask about travel packages..."):
         reply = result.get("output", "⚠️ No response received.")
 
     # Display assistant response
+    # NEW ✅: Force markdown with line breaks preserved
     with st.chat_message("assistant"):
-        st.markdown(reply)
+        st.markdown(reply, unsafe_allow_html=False, help=None)
+
 
     # Save assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": reply})
