@@ -1,5 +1,5 @@
-streamlit
-langchain
+streamlit==1.24.1
+langchain==0.0.268
 langchain-community==0.0.198
-python-dotenv
-requests
+python-dotenv==1.0.0
+requests==2.31.0
