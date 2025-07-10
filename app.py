@@ -1,7 +1,8 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-from langchain_community.chat_models import ChatGroq
+from langchain_groq import ChatGroq  # ✅ correct
+
 from langchain.agents import initialize_agent, AgentType
 from tools import get_packages, create_package
 
