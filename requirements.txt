@@ -1,5 +1,5 @@
 streamlit==1.24.1
 langchain==0.0.268
-langchain-community==0.0.198
+langchain-community>=0.0.211
 python-dotenv==1.0.0
 requests==2.31.0
