@@ -1,17 +1,17 @@
 from langchain.tools import Tool
 import requests
 
-API_BASE = "https://travelagentbackend.onrender.com/api"
+API_BASE = "https://travelagentbackend.onrender.com/api/"
 AUTH = ("rohansreejith05", "Rohan333$")
 
-def _get_packages(_input: str) -> str:
+def _get_packages(_input: str) -> dict:
     try:
         res = requests.get(f"{API_BASE}packages/", auth=AUTH, timeout=10)
         res.raise_for_status()
         packages = res.json()
 
         if not packages:
-            return "❗ No packages found."
+            return {"output": "❗ No packages found."}
 
         msg = "🧳 **Available Travel Packages:**\n"
         for pkg in packages:
@@ -30,15 +30,15 @@ def _get_packages(_input: str) -> str:
                 f"**Price:** {price_str}\n"
                 f"**Description:** {pkg.get('description', 'N/A')}\n"
             )
-        return msg
+        return {"output": msg}
     except requests.exceptions.RequestException as e:
-        return f"❌ Error: {e}"
+        return {"output": f"❌ Error fetching packages: {e}"}
 
-def _create_package(input_str: str) -> str:
+def _create_package(input_str: str) -> dict:
     try:
         parts = [p.strip() for p in input_str.split("|")]
         if len(parts) != 5:
-            return "❗ Format: title | destination | days | price | description"
+            return {"output": "❗ Format: title | destination | days | price | description"}
 
         days = int(parts[2])
         price = float(parts[3])
@@ -55,17 +55,19 @@ def _create_package(input_str: str) -> str:
         res.raise_for_status()
         pkg = res.json()
 
-        return (
-            f"✅ Package created:\n"
-            f"🆔 ID: {pkg.get('id')}\n"
-            f"🏷️ Title: {pkg.get('title')}\n"
-            f"📍 Destination: {pkg.get('destination')}\n"
-            f"📅 Duration: {pkg.get('duration_days')} days\n"
-            f"💰 Price: ${pkg.get('price'):,.2f}\n"
-            f"📝 Description: {pkg.get('description')}"
-        )
+        return {
+            "output": (
+                f"✅ Package created:\n"
+                f"🆔 ID: {pkg.get('id')}\n"
+                f"🏷️ Title: {pkg.get('title')}\n"
+                f"📍 Destination: {pkg.get('destination')}\n"
+                f"📅 Duration: {pkg.get('duration_days')} days\n"
+                f"💰 Price: ${pkg.get('price'):,.2f}\n"
+                f"📝 Description: {pkg.get('description')}"
+            )
+        }
     except Exception as e:
-        return f"❌ Error creating package: {e}"
+        return {"output": f"❌ Error creating package: {e}"}
 
 get_packages = Tool(
     name="get_packages",
