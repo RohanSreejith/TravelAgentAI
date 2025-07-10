@@ -15,13 +15,13 @@ def _get_packages(_input: str) -> str:
 
         result = "🧳 **Available Travel Packages:**\n"
         for pkg in packages:
-            # Safely handle and format price
-            price_raw = pkg.get("price", 0)
             try:
+                price_raw = pkg.get("price", 0)
                 price_val = float(price_raw)
-            except (ValueError, TypeError):
-                price_val = 0.0  # fallback value
-            price_str = f"${price_val:,.2f}"
+                price_str = f"${price_val:,.2f}"
+            except Exception as e:
+                price_str = "N/A 💥 (Invalid price)"
+                print(f"[Warning] Could not parse price for package ID {pkg.get('id')}: {e}")
 
             result += (
                 f"\n---\n"
@@ -32,10 +32,12 @@ def _get_packages(_input: str) -> str:
                 f"**Price:** {price_str}\n"
                 f"**Description:** {pkg.get('description', 'N/A')}\n"
             )
+
         return result
 
     except requests.exceptions.RequestException as e:
         return f"❌ Error fetching packages: {e}"
+
 
 
 def _create_package(input_str: str) -> str:
