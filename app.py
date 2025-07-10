@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_community.chat_models import ChatGroq
 from langchain.agents import initialize_agent, AgentType
 from tools import get_packages, create_package
 
@@ -15,15 +15,18 @@ st.set_page_config(
     layout="wide"
 )
 
+# ✅ Use API key from Streamlit secrets
+GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+
 # Initialize the agent (cached)
 @st.cache_resource
 def load_agent():
-    llm = ChatGoogleGenerativeAI(
-        model="models/gemini-1.5-flash",
+    llm = ChatGroq(
+        groq_api_key=GROQ_API_KEY,
+        model_name="mixtral-8x7b-32768",  # Or "llama3-70b-8192"
         temperature=0,
-        google_api_key=os.getenv("GOOGLE_API_KEY")
     )
-    
+
     return initialize_agent(
         tools=[get_packages, create_package],
         llm=llm,
@@ -47,26 +50,19 @@ for message in st.session_state.messages:
 
 # Chat input
 if prompt := st.chat_input("Ask about travel packages..."):
-    # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    # Display user message
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Get agent response
     agent = load_agent()
     with st.spinner("Thinking..."):
         result = agent.invoke({"input": prompt})
         reply = result.get("output", "⚠️ No response received.")
 
-    # Display assistant response
-    # NEW ✅: Force markdown with line breaks preserved
     with st.chat_message("assistant"):
-        st.markdown(reply, unsafe_allow_html=False, help=None)
+        st.markdown(reply, unsafe_allow_html=False)
 
-
-    # Save assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": reply})
 
 # Sidebar for package creation
