@@ -28,7 +28,7 @@ def load_agent():
         llm=llm,
         agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True,
-        handle_parsing_errors=True
+        handle_parsing_errors=True,
         return_intermediate_steps=False
     )
 
