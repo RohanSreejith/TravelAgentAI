@@ -29,7 +29,7 @@ def _get_packages(_input: str) -> str:
                 f"**Price:** {price_str}<br>"
                 f"**Description:** {pkg.get('description', 'N/A')}<br>"
             )
-        return msg
+        return {"output": msg}
 
     except requests.exceptions.RequestException as e:
         return f"❌ Error fetching packages: {e}"
