@@ -1,8 +1,7 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-from langchain_groq import ChatGroq  # ✅ correct
-
+from langchain_groq import ChatGroq
 from langchain.agents import initialize_agent, AgentType
 from tools import get_packages, create_package
 import streamlit.components.v1 as components
@@ -16,12 +15,11 @@ st.set_page_config(page_title="Travel Package Agent", page_icon="✈️", layout
 # Use API key from secrets
 GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 
-# Cached agent initialization
 @st.cache_resource
 def load_agent():
     llm = ChatGroq(
         groq_api_key=GROQ_API_KEY,
-        model_name="llama3-70b-8192", # or "mixtral-8x7b-32768", etc.
+        model_name="llama3-70b-8192",
         temperature=0,
     )
     return initialize_agent(
@@ -43,7 +41,10 @@ if "messages" not in st.session_state:
 # Display chat history
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+        if msg["role"] == "assistant" and msg.get("is_html", False):
+            components.html(msg["content"], height=800, scrolling=True)
+        else:
+            st.markdown(f"<div style='color:white'>{msg['content']}</div>", unsafe_allow_html=True)
 
 # Input
 if prompt := st.chat_input("Ask about travel packages..."):
@@ -60,15 +61,26 @@ if prompt := st.chat_input("Ask about travel packages..."):
             reply = f"❌ Error: {e}"
 
     with st.chat_message("assistant"):
-        styled_reply = f"""
-        <div style='color: white; background-color: #222; padding: 20px; border-radius: 10px; font-family: Arial, sans-serif;'>
-            {reply}
-        </div>
-        """
-        components.html(styled_reply, height=800, scrolling=True)
-
-
-    st.session_state.messages.append({"role": "assistant", "content": "Displayed travel packages."})
+        # If it's package HTML, use components.html
+        if "<div" in reply and "</div>" in reply:
+            styled_reply = f"""
+            <div style='color: white; background-color: #222; padding: 20px; border-radius: 10px; font-family: Arial, sans-serif;'>
+                {reply}
+            </div>
+            """
+            components.html(styled_reply, height=800, scrolling=True)
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": styled_reply,
+                "is_html": True
+            })
+        else:
+            st.markdown(f"<div style='color:white'>{reply}</div>", unsafe_allow_html=True)
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": reply,
+                "is_html": False
+            })
 
 # Sidebar: Create new package
 with st.sidebar:
