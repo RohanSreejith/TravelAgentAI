@@ -4,16 +4,16 @@ import requests
 API_BASE = "https://travelagentbackend.onrender.com/api/"
 AUTH = ("rohansreejith05", "Rohan333$")
 
-def _get_packages(_input: str) -> str:
+def _get_packages(_input: str) -> dict:
     try:
         res = requests.get(f"{API_BASE}packages/", auth=AUTH, timeout=10)
         res.raise_for_status()
         packages = res.json()
 
         if not packages:
-            return "❗ No packages found."
+            return {"output": "❗ No packages found."}
 
-        msg = "🧳 <b>Available Travel Packages:</b><br>"
+        msg = "🧳 <b>Available Travel Packages:</b><br><br>"
         for pkg in packages:
             try:
                 price = float(pkg.get("price", 0))
@@ -22,17 +22,19 @@ def _get_packages(_input: str) -> str:
                 price_str = "N/A"
 
             msg += (
-                f"<br><hr><br>"
-                f"**Title:** {pkg.get('title', 'N/A')}<br>"
-                f"**Destination:** {pkg.get('destination', 'N/A')}<br>"
-                f"**Duration:** {pkg.get('duration_days', 'N/A')} days<br>"
-                f"**Price:** {price_str}<br>"
-                f"**Description:** {pkg.get('description', 'N/A')}<br>"
+                f"<p>"
+                f"<b>Title:</b> {pkg.get('title', 'N/A')}<br>"
+                f"<b>Destination:</b> {pkg.get('destination', 'N/A')}<br>"
+                f"<b>Duration:</b> {pkg.get('duration_days', 'N/A')} days<br>"
+                f"<b>Price:</b> {price_str}<br>"
+                f"<b>Description:</b> {pkg.get('description', 'N/A')}<br>"
+                f"</p>"
             )
         return {"output": msg}
 
     except requests.exceptions.RequestException as e:
-        return f"❌ Error fetching packages: {e}"
+        return {"output": f"❌ Error fetching packages: {e}"}
+
 
 def _create_package(input_str: str) -> str:
     try:
