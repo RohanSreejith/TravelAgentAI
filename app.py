@@ -29,6 +29,7 @@ def load_agent():
         agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True,
         handle_parsing_errors=True
+        return_intermediate_steps=False
     )
 
 # UI
