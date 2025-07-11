@@ -12,8 +12,12 @@ def _get_packages(_input: str) -> str:
 
         if not packages:
             return "❗ No packages found."
+        
+        msg = """
+        <div style='color: white; font-family: sans-serif;'>
+            <h3>🧳 Available Travel Packages:</h3>
+        """
 
-        msg = "<h3>🧳 Available Travel Packages:</h3>"
         for pkg in packages:
             try:
                 price = float(pkg.get("price", 0))
@@ -21,13 +25,19 @@ def _get_packages(_input: str) -> str:
             except:
                 price_str = "N/A"
 
-            msg += (
-                "<hr>"
-                f"<b>Title:</b> {pkg.get('title', 'N/A')}<br>"
-                f"<b>Destination:</b> {pkg.get('destination', 'N/A')}<br>"
-                f"<b>Duration:</b> {pkg.get('duration_days', 'N/A')} days<br>"
-                f"<b>Price:</b> {price_str}<br>"
-                f"<b>Description:</b> {pkg.get('description', 'N/A')}<br>"
+            msg += """
+            <div style='background-color:#222; padding:20px; border-radius:10px; margin-bottom:20px;'>
+                <p><b>Title:</b> {title}</p>
+                <p><b>Destination:</b> {destination}</p>
+                <p><b>Duration:</b> {duration} days</p>
+                <p><b>Price:</b> {price}</p>
+                <p><b>Description:</b> {description}</p>
+            """.format(
+                title=pkg.get("title", "N/A"),
+                destination=pkg.get("destination", "N/A"),
+                duration=pkg.get("duration_days", "N/A"),
+                price=price_str,
+                description=pkg.get("description", "N/A")
             )
 
             # Media
@@ -36,14 +46,19 @@ def _get_packages(_input: str) -> str:
                 media_url = media.get("file")
                 media_type = media.get("media_type")
                 if media_type == "image":
-                    msg += f'<img src="{media_url}" style="max-width: 100%; margin-top: 10px;"><br>'
+                    msg += f'<img src="{media_url}" style="max-width: 100%; margin-top: 10px; border-radius: 8px;"><br>'
                 elif media_type == "video":
                     msg += (
-                        f'<video width="100%" controls style="margin-top: 10px;">'
+                        f'<video width="100%" controls style="margin-top: 10px; border-radius: 8px;">'
                         f'<source src="{media_url}" type="video/mp4">'
                         "Your browser does not support the video tag."
                         "</video><br>"
                     )
+
+            msg += "</div>"  # close individual package container
+
+        msg += "</div>"  # close outer wrapper
+
 
         return msg
 

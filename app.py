@@ -61,7 +61,7 @@ if prompt := st.chat_input("Ask about travel packages..."):
 
     with st.chat_message("assistant"):
         #st.markdown(reply, unsafe_allow_html=True)
-        components.html(reply, height=600, scrolling=True)
+        components.html(reply, height=800, scrolling=True)
 
     st.session_state.messages.append({"role": "assistant", "content": reply})
 
