@@ -60,8 +60,13 @@ if prompt := st.chat_input("Ask about travel packages..."):
             reply = f"❌ Error: {e}"
 
     with st.chat_message("assistant"):
-        #st.markdown(reply, unsafe_allow_html=True)
-        components.html(reply, height=800, scrolling=True)
+        styled_reply = f"""
+        <div style='color: white; background-color: #222; padding: 20px; border-radius: 10px; font-family: Arial, sans-serif;'>
+            {reply}
+        </div>
+        """
+        components.html(styled_reply, height=800, scrolling=True)
+
 
     st.session_state.messages.append({"role": "assistant", "content": reply})
 
