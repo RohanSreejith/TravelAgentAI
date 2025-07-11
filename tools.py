@@ -4,16 +4,16 @@ import requests
 API_BASE = "https://travelagentbackend.onrender.com/api/"
 AUTH = ("rohansreejith05", "Rohan333$")
 
-def _get_packages(_input: str) -> dict:
+def _get_packages(_input: str) -> str:
     try:
         res = requests.get(f"{API_BASE}packages/", auth=AUTH, timeout=10)
         res.raise_for_status()
         packages = res.json()
 
         if not packages:
-            return {"output": "❗ No packages found."}
+            return "❗ No packages found."
 
-        msg = "🧳 <b>Available Travel Packages:</b><br><br>"
+        msg = "🧳 **Available Travel Packages:**\n"
         for pkg in packages:
             try:
                 price = float(pkg.get("price", 0))
@@ -22,19 +22,29 @@ def _get_packages(_input: str) -> dict:
                 price_str = "N/A"
 
             msg += (
-                f"<div style='margin-bottom:20px;'>"
-                f"<b>Title:</b> {pkg.get('title', 'N/A')}<br>"
-                f"<b>Destination:</b> {pkg.get('destination', 'N/A')}<br>"
-                f"<b>Duration:</b> {pkg.get('duration_days', 'N/A')} days<br>"
-                f"<b>Price:</b> {price_str}<br>"
-                f"<b>Description:</b> {pkg.get('description', 'N/A')}<br>"
-                f"</div>"
+                f"\n---\n"
+                f"**Title:** {pkg.get('title', 'N/A')}\n"
+                f"**Destination:** {pkg.get('destination', 'N/A')}\n"
+                f"**Duration:** {pkg.get('duration_days', 'N/A')} days\n"
+                f"**Price:** {price_str}\n"
+                f"**Description:** {pkg.get('description', 'N/A')}\n"
             )
+
+            # Media
+            media_list = pkg.get("media", [])
+            for media in media_list:
+                media_url = media.get("file")
+                media_type = media.get("media_type")
+                if media_type == "image":
+                    msg += f"![Image]({media_url})\n"
+                elif media_type == "video":
+                    msg += f'<video width="100%" controls><source src="{media_url}" type="video/mp4">Your browser does not support the video tag.</video>\n'
 
         return msg
 
     except requests.exceptions.RequestException as e:
-        return {"output": f"❌ Error fetching packages: {e}"}
+        return f"❌ Error fetching packages: {e}"
+
 
 
 def _create_package(input_str: str) -> str:
