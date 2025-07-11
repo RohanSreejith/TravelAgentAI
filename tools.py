@@ -31,7 +31,7 @@ def _get_packages(_input: str) -> dict:
                 f"</div>"
             )
 
-        return {"output": msg}
+        return msg
 
     except requests.exceptions.RequestException as e:
         return {"output": f"❌ Error fetching packages: {e}"}
