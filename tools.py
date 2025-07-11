@@ -105,7 +105,7 @@ def _create_package(input_str: str) -> str:
 get_packages = Tool(
     name="get_packages",
     func=_get_packages,
-    description="Fetches all travel packages. Input is ignored.",
+    description="Use this tool only when the user explicitly asks to list, show, or view available travel packages.",
     return_direct=True
 )
 
