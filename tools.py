@@ -14,22 +14,22 @@ def _get_packages(_input: str) -> dict:
             return {"output": "❗ No packages found."}
 
         msg = "🧳 <b>Available Travel Packages:</b><br><br>"
-for pkg in packages:
-    try:
-        price = float(pkg.get("price", 0))
-        price_str = f"${price:,.2f}"
-    except:
-        price_str = "N/A"
+        for pkg in packages:
+            try:
+                price = float(pkg.get("price", 0))
+                price_str = f"${price:,.2f}"
+            except:
+                price_str = "N/A"
 
-    msg += (
-        f"<div style='margin-bottom:20px;'>"
-        f"<b>Title:</b> {pkg.get('title', 'N/A')}<br>"
-        f"<b>Destination:</b> {pkg.get('destination', 'N/A')}<br>"
-        f"<b>Duration:</b> {pkg.get('duration_days', 'N/A')} days<br>"
-        f"<b>Price:</b> {price_str}<br>"
-        f"<b>Description:</b> {pkg.get('description', 'N/A')}<br>"
-        f"</div>"
-    )
+            msg += (
+                f"<div style='margin-bottom:20px;'>"
+                f"<b>Title:</b> {pkg.get('title', 'N/A')}<br>"
+                f"<b>Destination:</b> {pkg.get('destination', 'N/A')}<br>"
+                f"<b>Duration:</b> {pkg.get('duration_days', 'N/A')} days<br>"
+                f"<b>Price:</b> {price_str}<br>"
+                f"<b>Description:</b> {pkg.get('description', 'N/A')}<br>"
+                f"</div>"
+            )
 
         return {"output": msg}
 
