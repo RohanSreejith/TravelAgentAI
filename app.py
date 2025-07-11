@@ -68,7 +68,7 @@ if prompt := st.chat_input("Ask about travel packages..."):
         components.html(styled_reply, height=800, scrolling=True)
 
 
-    st.session_state.messages.append({"role": "assistant", "content": reply})
+    st.session_state.messages.append({"role": "assistant", "content": "Displayed travel packages."})
 
 # Sidebar: Create new package
 with st.sidebar:
