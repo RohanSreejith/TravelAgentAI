@@ -13,7 +13,7 @@ def _get_packages(_input: str) -> str:
         if not packages:
             return "❗ No packages found."
 
-        msg = "🧳 **Available Travel Packages:**\n"
+        msg = "<h3>🧳 Available Travel Packages:</h3>"
         for pkg in packages:
             try:
                 price = float(pkg.get("price", 0))
@@ -22,12 +22,12 @@ def _get_packages(_input: str) -> str:
                 price_str = "N/A"
 
             msg += (
-                f"\n---\n"
-                f"**Title:** {pkg.get('title', 'N/A')}\n"
-                f"**Destination:** {pkg.get('destination', 'N/A')}\n"
-                f"**Duration:** {pkg.get('duration_days', 'N/A')} days\n"
-                f"**Price:** {price_str}\n"
-                f"**Description:** {pkg.get('description', 'N/A')}\n"
+                "<hr>"
+                f"<b>Title:</b> {pkg.get('title', 'N/A')}<br>"
+                f"<b>Destination:</b> {pkg.get('destination', 'N/A')}<br>"
+                f"<b>Duration:</b> {pkg.get('duration_days', 'N/A')} days<br>"
+                f"<b>Price:</b> {price_str}<br>"
+                f"<b>Description:</b> {pkg.get('description', 'N/A')}<br>"
             )
 
             # Media
@@ -36,14 +36,20 @@ def _get_packages(_input: str) -> str:
                 media_url = media.get("file")
                 media_type = media.get("media_type")
                 if media_type == "image":
-                    msg += f"![Image]({media_url})\n"
+                    msg += f'<img src="{media_url}" style="max-width: 100%; margin-top: 10px;"><br>'
                 elif media_type == "video":
-                    msg += f'<video width="100%" controls><source src="{media_url}" type="video/mp4">Your browser does not support the video tag.</video>\n'
+                    msg += (
+                        f'<video width="100%" controls style="margin-top: 10px;">'
+                        f'<source src="{media_url}" type="video/mp4">'
+                        "Your browser does not support the video tag."
+                        "</video><br>"
+                    )
 
         return msg
 
     except requests.exceptions.RequestException as e:
         return f"❌ Error fetching packages: {e}"
+
 
 
 

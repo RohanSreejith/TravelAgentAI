@@ -5,6 +5,7 @@ from langchain_groq import ChatGroq  # ✅ correct
 
 from langchain.agents import initialize_agent, AgentType
 from tools import get_packages, create_package
+import streamlit.components.v1 as components
 
 # Load environment variables
 load_dotenv()
@@ -59,7 +60,8 @@ if prompt := st.chat_input("Ask about travel packages..."):
             reply = f"❌ Error: {e}"
 
     with st.chat_message("assistant"):
-        st.markdown(reply, unsafe_allow_html=True)
+        #st.markdown(reply, unsafe_allow_html=True)
+        components.html(reply, height=600, scrolling=True)
 
     st.session_state.messages.append({"role": "assistant", "content": reply})
 
