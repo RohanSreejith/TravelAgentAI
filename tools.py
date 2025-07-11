@@ -12,7 +12,7 @@ def _get_packages(_input: str) -> str:
 
         if not packages:
             return "❗ No packages found."
-        
+
         msg = """
         <div style='color: white; font-family: sans-serif;'>
             <h3>🧳 Available Travel Packages:</h3>
@@ -57,10 +57,14 @@ def _get_packages(_input: str) -> str:
 
             msg += "</div>"  # close individual package container
 
+        msg += "<p style='color: lightgray; margin-top: 20px;'><i>✅ Travel package details displayed above.</i></p>"
         msg += "</div>"  # close outer wrapper
 
-
         return msg
+
+    except requests.exceptions.RequestException as e:
+        return f"❌ Error fetching packages: {e}"
+
 
     except requests.exceptions.RequestException as e:
         return f"❌ Error fetching packages: {e}"
