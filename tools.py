@@ -13,7 +13,7 @@ def _get_packages(_input: str) -> str:
         if not packages:
             return "❗ No packages found."
 
-        msg = "🧳 **Available Travel Packages:**\n"
+        msg = "🧳 <b>Available Travel Packages:</b><br>"
         for pkg in packages:
             try:
                 price = float(pkg.get("price", 0))
@@ -22,13 +22,12 @@ def _get_packages(_input: str) -> str:
                 price_str = "N/A"
 
             msg += (
-                f"\n---\n"
-                f"**ID:** {pkg.get('id', 'N/A')}\n"
-                f"**Title:** {pkg.get('title', 'N/A')}\n"
-                f"**Destination:** {pkg.get('destination', 'N/A')}\n"
-                f"**Duration:** {pkg.get('duration_days', 'N/A')} days\n"
-                f"**Price:** {price_str}\n"
-                f"**Description:** {pkg.get('description', 'N/A')}\n"
+                f"<br><hr><br>"
+                f"**Title:** {pkg.get('title', 'N/A')}<br>"
+                f"**Destination:** {pkg.get('destination', 'N/A')}<br>"
+                f"**Duration:** {pkg.get('duration_days', 'N/A')} days<br>"
+                f"**Price:** {price_str}<br>"
+                f"**Description:** {pkg.get('description', 'N/A')}<br>"
             )
         return msg
 
@@ -57,12 +56,12 @@ def _create_package(input_str: str) -> str:
         pkg = res.json()
 
         return (
-            f"✅ Package created:\n"
-            f"🆔 ID: {pkg.get('id')}\n"
-            f"🏷️ Title: {pkg.get('title')}\n"
-            f"📍 Destination: {pkg.get('destination')}\n"
-            f"📅 Duration: {pkg.get('duration_days')} days\n"
-            f"💰 Price: ${pkg.get('price'):,.2f}\n"
+            f"✅ Package created:<br>"
+            f"🆔 ID: {pkg.get('id')}<br>"
+            f"🏷️ Title: {pkg.get('title')}<br>"
+            f"📍 Destination: {pkg.get('destination')}<br>"
+            f"📅 Duration: {pkg.get('duration_days')} days<br>"
+            f"💰 Price: ${pkg.get('price'):,.2f}<br>"
             f"📝 Description: {pkg.get('description')}"
         )
 
